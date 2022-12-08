@@ -12,6 +12,7 @@ class State(Turtle):
 
     def read_csv(self, csv_file):
         self.data = pd.DataFrame(pd.read_csv(csv_file))
+        return self.data
 
     def write_state_name(self, state_name):
         state_name = state_name.strip().title()
