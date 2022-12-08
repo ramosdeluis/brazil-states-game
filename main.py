@@ -1,5 +1,4 @@
 from turtle import Screen
-from time import sleep
 
 
 from states import State
@@ -34,19 +33,30 @@ screen.tracer(0)
 # screen.onkey(coor_tree.move_right, 'l')
 
 states = State()
-states.read_csv('brazil_states.csv')
+all_states = states.read_csv('brazil_states.csv')
 board = Board()
 
 is_game_on = True
 
 while is_game_on:
     screen.update()
-    player_state = screen.textinput('Find a Brazil state', 'State:')
-    if states.write_state_name(player_state):
+    answer = screen.textinput('Find a Brazil state', 'State:')
+    if answer.strip().lower() == 'exit':
+        is_game_on = False
+    if states.write_state_name(answer):
         board.make_point()
     if board.score == 27:
         board.end_game()
         is_game_on = False
+
+if board.score < 27:
+    cont = 0
+    with open('missing_states.csv', mode='w') as file:
+        file.write(',missing_state,\n')
+        for state in states.data['state'].values:
+            file.write(f'{cont},{state},\n')
+            cont += 1
+
 
 screen.exitonclick()
 
